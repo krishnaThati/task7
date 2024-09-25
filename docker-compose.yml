@@ -1,9 +1,11 @@
 version: "3.8"
 services:
   medusa:
-    image: medusa-app:latest # Your pre-built Medusa image
+    image: medusa-app2:latest # Your pre-built Medusa image
     environment:
-      MEDUSA_DB_URL: "postgres://postgres:postgrespass@postgres:5432/krishna"
+      #DATABASE_URL: "postgres://postgres:postgrespass@localhost:5432/krishna"
+      DATABASE_URL: "postgres://postgres:postgrespass@postgres:5432/krishna"
+
     ports:
       - "8080:8080"
     depends_on:

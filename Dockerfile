@@ -8,4 +8,6 @@ WORKDIR /app
 RUN npm install -g @medusajs/medusa-cli
 COPY --from=build /app .
 EXPOSE 8080
-CMD medusa migrations run && npm run start
+CMD medusa migrations run && medusa develop --port 8080
+
+#CMD medusa migrations run && npm run start
