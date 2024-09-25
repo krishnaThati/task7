@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  medusa:
+    image: medusa-app:latest # Your pre-built Medusa image
+    environment:
+      MEDUSA_DB_URL: "postgres://postgres:postgrespass@postgres:5432/krishna"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - medusa-network
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres      # Replace with your desired username
+      POSTGRES_PASSWORD: postgrespass    # Replace with your desired password
+      POSTGRES_DB: krishna           # Replace with your desired database name
+    ports:
+      - "5432:5432"
+    networks:
+      - medusa-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  medusa-network:
+    driver: bridge
