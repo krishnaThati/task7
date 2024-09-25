@@ -1,34 +1,35 @@
-name: Build and Push Docker Image to ECR
+name: Build and Push to Amazon ECR
 
 on:
   push:
     branches:
-      - main  # Adjust according to your default branch
-  pull_request:
-    branches:
-      - main  # Adjust according to your default branch
+      - main
 
 jobs:
-  build:
+  build-and-push:
+    name: Build and Push to ECR
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          region: ${{ secrets.AWS_REGION }}  # Ensure AWS_REGION is set in secrets
-
-      - name: Build Docker image
-        run: |
-          docker build -t task7 .
-
-      - name: Tag Docker image
-        run: |
-          docker tag task7:latest 202533508516.dkr.ecr.us-east-1.amazonaws.com/task7:latest
-
-      - name: Push Docker image to ECR
-        run: |
-          docker push 202533508516.dkr.ecr.us-east-1.amazonaws.com/task7:latest
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: medusa_store
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
