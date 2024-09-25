@@ -1,10 +1,6 @@
 name: Build and Push to Amazon ECR
 
-on:
-  push:
-    branches:
-      - main
-
+ removed due to continues mails
 jobs:
   build-and-push:
     name: Build and Push to ECR
