@@ -1,9 +1,9 @@
-name: Deploy to ECS Fargate Spot
+name: Terraform
 
 on:
   push:
     branches:
-      - main  # Change this to your preferred branch
+      - main
 
 jobs:
   deploy:
@@ -13,20 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.5.0  # Specify your Terraform version
-
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Plan
-        run: terraform plan
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Set up AWS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_DEFAULT_REGION: us-east-1  # Change to your preferred region
+        run: |
+          echo "Initializing Terraform"
+          terraform init
+
+      - name: Run Terraform Plan
+        run: |
+          echo "Running terraform plan"
+          terraform plan -out=tfplan
+
+      - name: Run Terraform Apply
+        run: |
+          echo "Applying terraform plan"
+          terraform apply -auto-approve tfplan
