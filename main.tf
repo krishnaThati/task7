@@ -33,16 +33,4 @@ resource "aws_ecs_task_definition" "medusa" {
   }])
 }
 
-# Create an ECS Service to run the Task Definition
-resource "aws_ecs_service" "medusa_service" {
-  name            = "medusa-service"
-  cluster         = aws_ecs_cluster.medusa_cluster.id  # Reference the cluster created above
-  task_definition = aws_ecs_task_definition.medusa.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-  network_configuration {
-    subnets          = ["sg-05de51d9b26afb3f8"]  # Specify your subnet IDs here
-    assign_public_ip = true  # Optional: Set to true if you want the task to have a public IP
-    security_groups  = ["subnet-0eea857c1cf095bf7"]  # Specify your security group ID here
-  }
-}
+
