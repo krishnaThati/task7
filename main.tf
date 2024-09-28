@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-1"  # Change to your desired region
+}
+
 # Data block to reference the existing IAM role
 data "aws_iam_role" "ecs_task_execution_role" {
   name = "task8_fullAccess"  # Ensure this IAM role exists
