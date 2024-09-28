@@ -14,10 +14,10 @@ resource "aws_ecs_task_definition" "medusa" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn  # Corrected reference
+  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
   container_definitions    = jsonencode([{
     name      = "medusa"
-    image     = "202533508516.dkr.ecr.us-east-1.amazonaws.com/task7:latest"  # Replace with your ECR image URI
+    image     = "202533508516.dkr.ecr.us-east-1.amazonaws.com/task7:latest"
     cpu       = 256
     memory    = 512
     essential = true
