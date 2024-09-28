@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"  # Change to your desired region
+  region = "us-east-1"   # Change to your desired region
 }
 
 # Data block to reference the existing IAM role
