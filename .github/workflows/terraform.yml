@@ -12,7 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Run Terraform commands directly, assuming .tf files are in the root directory
+      - name: Set up Terraform
+        run: |
+          echo "terraform {
+            required_providers {
+              aws = {
+                source  = \"hashicorp/aws\"
+                version = \"~> 4.0\"
+              }
+            }
+            required_version = \">= 1.0\"
+          }" > terraform.tf
+
       - name: Terraform Init
         run: terraform init
 
